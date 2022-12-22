@@ -11,8 +11,11 @@ import {
   Alert,
 } from "@mui/material";
 import { login } from "../services/loginService";
+import {  Cookies } from "react-cookie";
 
+const cookies = new Cookies();
 class Login extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +36,7 @@ class Login extends React.Component {
       toastSeverity: "success",
       toastMessage: "",
       redirect: true,
+      
     };
   }
   onInputChange = (event) => {
@@ -75,12 +79,33 @@ class Login extends React.Component {
     login(this.state.loginForm.email, this.state.loginForm.password)
       .then((data) => {
         if (data) {
-          if (data.statusCode === 401) {
+          if (data.statusCode === 401 || data.statusCode === 503) {
             this.setState({
               toastSeverity: "error",
               toastMessage: "Entered wrong credentials",
             });
           } else {
+
+    cookies.set('email', data.email, {
+      path: '/',
+      sameSite: 'Strict'
+    });
+    cookies.set('candidateId', data.candidateId, {
+      path: '/',
+      sameSite: 'Strict'
+    });
+    cookies.set('userId', data.userId, {
+      path: '/',
+      sameSite: 'Strict'
+    });
+    sessionStorage.setItem('principal role', data.roles[0].roleIdentifier);
+
+    const tokenStr = data.jwtToken;
+    cookies.set('token', tokenStr, {
+      path: '/',
+      sameSite: 'Strict'
+    });
+
             this.setState({
               toastSeverity: "success",
               toastMessage: "Logged in successfully",
@@ -88,13 +113,12 @@ class Login extends React.Component {
             window.location = "/dashboard";
           }
           this.setState({ setOpen: true });
-          console.log(data);
-          console.log(this.state);
+        
         }
       })
       .catch((err) => {
         this.setState({ setOpen: true });
-        console.log(err.message);
+       
       });
   };
   handleClose = (event, reason) => {

@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.custom-timestamp {
+  font-size: 0.7rem;
+  color: grey;
+  /* margin-top: 0.5rem; */
+}
+
+.Button{
+  text-transform: none;
+}
+
+.contactNumberLabel{
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 400;
+}
+

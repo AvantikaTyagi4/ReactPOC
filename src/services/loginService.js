@@ -1,5 +1,9 @@
+import { SERVICE_URL } from "../constants/configuration";
+
 export async function login(email, password) {
-  return fetch("http://localhost:9000/onboard/auth/authenticate", {
+  var url = SERVICE_URL +'/auth/authenticate';
+  
+  return fetch(url, {
     method: "POST",
     body: JSON.stringify({
       email: email,
